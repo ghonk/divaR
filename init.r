@@ -26,15 +26,14 @@ for (shj in 1:6) {
   result <- run_diva(model)
 
 # # # add result to training matrix
-print(training)
-str(training)
-print(result$training)
-
 training[,shj] <- result$training
 
 }
 
+# display results
 print(training)
+train_plot(training)
+save.image(paste0('diva_run.rdata'))
 
 # warnings()
 
