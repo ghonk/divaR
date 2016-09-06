@@ -24,12 +24,18 @@ for (shj in 1:6) {
 
   # # # train model
   result <- run_diva(model)
+
+# # # add result to training matrix
+print(training)
+str(training)
+print(result$training)
+
+training[,shj] <- result$training
+
 }
-#   # # # add result to training matrix
-#   training[,shj] <- result$training
+
+print(training)
 
 # warnings()
-# }
 
-# print(training)
 

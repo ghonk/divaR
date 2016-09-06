@@ -207,9 +207,11 @@ run_diva <- function(model) {
   
   }
 
-print(rowMeans(matrix(rowMeans(training), nrow = num_blocks, ncol = num_stims, byrow = TRUE)))
+training_means <- 
+  rowMeans(matrix(rowMeans(training), nrow = num_blocks, ncol = num_stims, byrow = TRUE))
 detach(model)
-#return(list(training = training))
+return(list(training = training_means))
+
 }
 
 # shj_cats
