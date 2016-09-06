@@ -29,7 +29,7 @@ training[,shj] <- result$training
 # display results
 print(training)
 train_plot(training)
-save.image(paste0('diva_run.rdata'))
+save.image('diva_run.rdata')
 
 # warnings()
 
