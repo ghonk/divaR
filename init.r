@@ -1,9 +1,5 @@
-# # # currently working on response rule and (subtracting small mat from larger) 
 
 source('utils.r')
-
-# # # CHECK AND CLOSE PDFS
-# # # LOAD PACKAGES?
 
 # # # Initialize model parameters
 model <- list(num_blocks    = 20,
