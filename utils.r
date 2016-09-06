@@ -258,7 +258,7 @@ shj_cats <- function(type){
               -1,  1,  1,
                1, -1, -1,
               -1,  1, -1,
-              -1  -1,  1,
+              -1, -1,  1,
               -1, -1, -1), nrow = 8, ncol = 3, byrow = TRUE)
   
   } else if (type == 5){
