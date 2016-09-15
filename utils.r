@@ -170,20 +170,20 @@ return(list(ps       = (ssqerror / sum(ssqerror)),
 # trains vanilla diva
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 run_diva <- function(model) {
+  
   # # # get new seed
   seed <- runif(1) * 100000 * runif(1)
   set.seed(seed)
+  
   # # # set mean value of weights
   model$wts_center <- 0 
   # # # convert targets to 0/1
   model$targets <- global_scale(model$inputs) 
-  
   # # # init size parameter variables
   model$num_feats   <- ncol(model$inputs)
   model$num_stims   <- nrow(model$inputs)
   model$num_cats    <- length(unique(model$labels))
   model$num_updates <- model$num_blocks * model$num_stims
-  
   # # # init training accuracy matrix
   training <- 
     matrix(rep(NA, model$num_updates * model$num_inits), 
@@ -196,7 +196,8 @@ run_diva <- function(model) {
     wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, model$wts_range, model$wts_center)
 
     # # # generate presentation order
-    prez_order <- rep(1:model$num_stims, model$num_blocks)
+    prez_order <- as.vector(apply(replicate(model$num_blocks, 
+      seq(1, model$num_stims)), 2, sample, model$num_stims))
 
     # # # iterate over each trial in the presentation order 
     for (trial_num in 1:model$num_updates) {
@@ -207,9 +208,6 @@ run_diva <- function(model) {
       # # # complete forward pass
       fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
     
-      # print(hid_activation)
-      # print(out_activation)
-      # readline(' ')
       # # # calculate classification probability
       response <- response_rule(fp$out_activation, current_target, model$beta_val)
 
@@ -225,11 +223,7 @@ run_diva <- function(model) {
 
       wts$out_wts[,,current_class] <- adjusted_wts$out_wts
       wts$in_wts <- adjusted_wts$in_wts
-
-      # print(in_wts)
-      # print(out_wts[,,current_class])
-      # readline(' ')
-      
+  
     }
 
   }
