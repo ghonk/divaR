@@ -133,6 +133,7 @@ train_plot <- function(training) {
 
   # # # produce plot
   dev.off()
+
 }
 
 # response_rule
@@ -152,23 +153,33 @@ response_rule <- function(out_activation, target_activation, beta_val){
   ssqerror[ssqerror < 1e-7] <- 1e-7
 
   # # # generate focus weights
-  if(dim(out_activation)[3] > 2 | dim(out_activation)[1] > 1){
-    stop('Not coded for >2 channels or batch mode, sorry!')
-  } else {
-    
-    # # # get pairwise differences for feature activation
-    # # # this needs to be coded to adjust for n>2 cats
-    diversities <- 
-      exp(beta_val * diag(as.matrix(dist(out_activation, upper = TRUE))[1:3,4:6]))
-    diversities[diversities > 1e+7] <- 1e+7
+   
+  # # # get pairwise differences for feature activation
+  # # # this needs to be coded to adjust for n>2 cats
+  
+  # # # get list of channelwise comparisons
+  pairwise_comps <- combn(1:num_cats, 2)
+  
+  # # # get differences between each feature
+  dist_mat <- as.matrix(dist(out_activation, upper = TRUE))
 
-    # divide diversities by sum of diversities
-    fweights = diversities / sum(diversities)
+  # # # get key differences between each feature for all channels
+  pairwise_diffs <- t(apply(pairwise_comps, 2, function(x) {
+    diag(dist_mat[((x[1] * num_feats) - (num_feats - 1)):(x[1] * num_feats),
+      ((x[2] * num_feats) - (num_feats - 1)):(x[2] * num_feats)])
+  }))
 
-    # # # apply focus weights; then get sum for each category
-    ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
-    ssqerror <- 1 / ssqerror
-  }
+  # # # calculate diversities
+  diversities <- exp(beta_val * colMeans(pairwise_diffs))
+  diversities[diversities > 1e+7] <- 1e+7
+
+  # divide diversities by sum of diversities
+  fweights = diversities / sum(diversities)
+
+  # # # apply focus weights; then get sum for each category
+  ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
+  ssqerror <- 1 / ssqerror
+
 
 return(list(ps       = (ssqerror / sum(ssqerror)), 
             fweights = fweights, 
@@ -217,7 +228,7 @@ run_diva <- function(model) {
 
       # # # complete forward pass
       fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
-    
+
       # # # calculate classification probability
       response <- response_rule(fp$out_activation, current_target, model$beta_val)
 
@@ -267,7 +278,8 @@ shj_cats <- function(type){
              1, 1, 2, 1, 1, 2, 2, 2,  # type III
              1, 1, 1, 2, 1, 2, 2, 2,  # type IV
              2, 1, 1, 1, 1, 2, 2, 2,  # type V
-             1, 2, 2, 1, 2, 1, 1, 2), # type VI 
+             1, 2, 2, 1, 2, 1, 1, 2,  # type VI
+             1, 1, 2, 2, 3, 3, 4, 4), # type II multiclass  
       ncol = 8, byrow = TRUE)
 
 return(list(inputs = in_pattern, 

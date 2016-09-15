@@ -13,18 +13,18 @@ model <- list(num_blocks    = 20,
 			  beta_val      = 5,
 			  out_rule      = 'sigmoid') # linear / tan not implemented
 
-
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 # # # run demo ? 
 demo <- TRUE  # run demo
 # demo <- FALSE # run something else
 
 if (demo == TRUE) {
   # # # create training results 
-  training = matrix(rep(0, model$num_blocks * 6), ncol = 6)
+  training = matrix(rep(0, model$num_blocks * 7), ncol = 7)
   
   # # # initialize model and run it on each SHJ category structure
-  for (shj in 1:6) { 
-  
+  for (shj in 1:7) { 
+  	print(shj)
     # # # get shj stimuli
     cases <- shj_cats(shj)
     model$inputs <- cases$inputs
@@ -43,8 +43,6 @@ if (demo == TRUE) {
   train_plot(training)
   save.image('diva_run.rdata')
 }
-
-
 
 # warnings()
 
