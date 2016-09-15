@@ -2,7 +2,7 @@
 
 # # # backprop
 # backpropagate error and update weights
-# #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 backprop <- function(out_wts, in_wts, out_activation, current_target, 
                      hid_activation, hid_activation_raw, ins_w_bias, learning_rate){
 
@@ -250,77 +250,28 @@ return(list(training = training_means))
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 shj_cats <- function(type){
   
-  if (type == 1) {
-    in_patterns <- 
-      matrix(c(1,  1,  1,
-	             1,  1, -1,
-	             1, -1,  1,
-  	           1, -1, -1,
-	            -1, -1,  1,
-	            -1, -1, -1,
-	            -1,  1,  1,
-	            -1,  1, -1), nrow = 8, ncol = 3, byrow = TRUE)		
+  in_pattern <- 
+    matrix(c(-1, -1, -1,
+	           -1, -1,  1,
+	           -1,  1, -1,
+  	         -1,  1,  1,
+	            1, -1, -1,
+	            1, -1,  1,
+	            1,  1, -1,
+	            1,  1,  1), 
+      nrow = 8, ncol = 3, byrow = TRUE)		
 
-  } else if (type == 2){
-  	in_patterns <-
-  	  matrix(c(1,  1,  1,
-  	  	       1,  1, -1,
-       	      -1, -1,	 1,
-	            -1, -1, -1,
-	            -1,	 1,	 1,
-	            -1,	 1, -1,
-	  	         1, -1,	 1,
-		           1, -1, -1), nrow = 8, ncol = 3, byrow = TRUE)
-  
-  } else if (type == 3){
-  	in_patterns <-
-  	  matrix(c(1,  1,  1,
-  	  	       1,  1, -1,
-  	  	       1, -1,  1, 
-  	          -1,  1, -1,
-  	           1, -1, -1, 
-  	          -1,  1,  1, 
-  	          -1, -1,  1, 
-  	          -1, -1, -1), nrow = 8, ncol = 3, byrow = TRUE)
-  
-  } else if (type == 4){
-    in_patterns <-
-      matrix(c(1,  1,  1,
-               1,  1, -1,
-               1, -1,  1,
-              -1,  1,  1,
-               1, -1, -1,
-              -1,  1, -1,
-              -1, -1,  1,
-              -1, -1, -1), nrow = 8, ncol = 3, byrow = TRUE)
-  
-  } else if (type == 5){
-    in_patterns <-
-      matrix(c(1,  1,  1,
-               1,  1, -1,
-               1, -1,  1,
-              -1, -1, -1,
-               1, -1, -1,
-              -1,  1,  1,
-              -1,  1, -1,
-              -1, -1,  1), nrow = 8, ncol = 3, byrow = TRUE)
-  
-  } else if (type == 6){
-    in_patterns <-
-      matrix(c(1,  1,  1,
-               1, -1, -1,
-              -1,  1, -1,
-              -1, -1,  1,
-               1,  1, -1,
-               1, -1,  1,
-              -1,  1,  1,
-              -1, -1, -1), nrow = 8, ncol = 3, byrow = TRUE)
-  }
+  cat_assignment <- 
+    matrix(c(1, 1, 1, 1, 2, 2, 2, 2,  # type I
+             1, 1, 2, 2, 2, 2, 1, 1,  # type II
+             1, 1, 2, 1, 1, 2, 2, 2,  # type III
+             1, 1, 1, 2, 1, 2, 2, 2,  # type IV
+             2, 1, 1, 1, 1, 2, 2, 2,  # type V
+             1, 2, 2, 1, 2, 1, 1, 2), # type VI 
+      ncol = 8, byrow = TRUE)
 
-cat_assignment <- c(1, 1, 1, 1, 2, 2, 2, 2)
-
-return(list(inputs = in_patterns, 
-			      labels = cat_assignment))
+return(list(inputs = in_pattern, 
+			      labels = cat_assignment[type,]))
 
 }
 
