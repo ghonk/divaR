@@ -1,6 +1,7 @@
 # # # setwd('C:/Users/garre/Dropbox/aa projects/DIVA')
 
 # # backprop
+# backpropagate error and update weights
 # #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 backprop <- function(out_wts, in_wts, out_activation, current_target, 
                      hid_activation, hid_activation_raw, ins_w_bias, learning_rate){
@@ -51,7 +52,9 @@ forward_pass <- function(in_wts, out_wts, inputs, out_rule) {
   # # # hids to outs propagation
   out_activation <- array(rep(0, (num_stims * num_feats * num_cats)), 
     dim = c(num_stims, num_feats, num_cats))
+  
   # # NEED VECTORIZED HERE
+  # # # get output activation
   for (category in 1:num_cats) {
   	out_activation[,,category] <- hid_activation %*% out_wts[,,category]
   }

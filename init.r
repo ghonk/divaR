@@ -1,8 +1,6 @@
 
 source('utils.r')
 
-# # # issue - weights seem to not update between model runs
-# # # issue - fweights are not accurate
 # # # test out diagonal approach for pairwise diffs w n>2 cats
 
 # # # Initialize model parameters
