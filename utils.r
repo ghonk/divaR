@@ -140,15 +140,16 @@ response_rule <- function(out_activation, target_activation, beta_val){
       c(num_stims, num_feats, num_cats))
   ssqerror <- ssqerror ^ 2
   ssqerror[ssqerror < 1e-7] <- 1e-7
-  
+
   # # # generate focus weights
   if(dim(out_activation)[3] > 2 | dim(out_activation)[1] > 1){
     stop('Not coded for >2 channels or batch mode, sorry!')
   } else {
     
-    # # # candidate for errors:
+    # # # get pairwise differences for feature activation
+    # # # this needs to be coded to adjust for n>2 cats
     diversities <- 
-      exp(beta_val * abs(matrix(dist(out_activation))[num_feats:((num_feats*2)-1)]))  
+      exp(beta_val * diag(as.matrix(dist(out_activation, upper = TRUE))[1:3,4:6]))
     diversities[diversities > 1e+7] <- 1e+7
 
     # divide diversities by sum of diversities
@@ -169,76 +170,73 @@ return(list(ps       = (ssqerror / sum(ssqerror)),
 # trains vanilla diva
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 run_diva <- function(model) {
-  # # # extract model vars
-  attach(model)
   # # # get new seed
   seed <- runif(1) * 100000 * runif(1)
   set.seed(seed)
   # # # set mean value of weights
-  wts_center <- 0 
+  model$wts_center <- 0 
   # # # convert targets to 0/1
-  targets <- global_scale(model$inputs) 
+  model$targets <- global_scale(model$inputs) 
   
   # # # init size parameter variables
-  num_feats   <- ncol(inputs)
-  num_stims   <- nrow(inputs)
-  num_cats    <- length(unique(labels))
-  num_updates <- num_blocks * num_stims
+  model$num_feats   <- ncol(model$inputs)
+  model$num_stims   <- nrow(model$inputs)
+  model$num_cats    <- length(unique(model$labels))
+  model$num_updates <- model$num_blocks * model$num_stims
   
   # # # init training accuracy matrix
   training <- 
-    matrix(rep(NA, num_updates * num_inits), nrow = num_updates, ncol = num_inits)
+    matrix(rep(NA, model$num_updates * model$num_inits), 
+      nrow = model$num_updates, ncol = model$num_inits)
   
   # # # initialize and run DIVA models
-  for (model_num in 1:num_inits) {
-  	
+  for (model_num in 1:model$num_inits) {
+    
     # # # generate weights
-  	wts_list <- get_wts(num_feats, num_hids, num_cats, wts_range, wts_center)
-    attach(wts_list)
+    wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, model$wts_range, model$wts_center)
 
     # # # generate presentation order
-  	prez_order <- as.vector(apply(replicate(num_blocks, seq(1, num_stims)), 
-  	  2, sample, num_stims))
+    prez_order <- rep(1:model$num_stims, model$num_blocks)
 
     # # # iterate over each trial in the presentation order 
-    for (trial_num in 1:num_updates) {
-      current_input  <- inputs[prez_order[[trial_num]], ]
-      current_target <- targets[prez_order[[trial_num]], ]
-      current_class  <- labels[prez_order[[trial_num]]] 
+    for (trial_num in 1:model$num_updates) {
+      current_input  <- model$inputs[prez_order[[trial_num]], ]
+      current_target <- model$targets[prez_order[[trial_num]], ]
+      current_class  <- model$labels[prez_order[[trial_num]]] 
 
       # # # complete forward pass
-      fp_result <- forward_pass(in_wts, out_wts, current_input, out_rule)
-      attach(fp_result)
-
+      fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
+    
+      # print(hid_activation)
+      # print(out_activation)
+      # readline(' ')
       # # # calculate classification probability
-      rr_result <- response_rule(out_activation, current_target, beta_val)
-      attach(rr_result)
+      response <- response_rule(fp$out_activation, current_target, model$beta_val)
 
       # # # store classification accuracy
-      training[trial_num, model_num] = ps[current_class]
+      training[trial_num, model_num] = response$ps[current_class]
 
       # # # back propagate error to adjust weights
-      class_wts <- out_wts[,,current_class]
-      class_activation <- out_activation[,,current_class]
+      class_wts <- wts$out_wts[,,current_class]
+      class_activation <- fp$out_activation[,,current_class]
 
-      adjusted_wts <- backprop(class_wts, in_wts, class_activation, current_target,  
-               hid_activation, hid_activation_raw, ins_w_bias, learning_rate)
+      adjusted_wts <- backprop(class_wts, wts$in_wts, class_activation, current_target,  
+               fp$hid_activation, fp$hid_activation_raw, fp$ins_w_bias, model$learning_rate)
 
-      out_wts[,,current_class] <- adjusted_wts$out_wts
-      in_wts <- adjusted_wts$in_wts
+      wts$out_wts[,,current_class] <- adjusted_wts$out_wts
+      wts$in_wts <- adjusted_wts$in_wts
 
-      detach(fp_result)
-      detach(rr_result)
-
+      # print(in_wts)
+      # print(out_wts[,,current_class])
+      # readline(' ')
+      
     }
-    
-    detach(wts_list)
-  
+
   }
 
 training_means <- 
-  rowMeans(matrix(rowMeans(training), nrow = num_blocks, ncol = num_stims, byrow = TRUE))
-detach(model)
+  rowMeans(matrix(rowMeans(training), nrow = model$num_blocks, ncol = model$num_stims, byrow = TRUE))
+
 return(list(training = training_means))
 
 }
