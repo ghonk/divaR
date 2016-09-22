@@ -1,7 +1,31 @@
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
+#             dddddddd                                                                    
+#             d::::::d  iiii                                          RRRRRRRRRRRRRRRRR   
+#             d::::::d i::::i                                         R::::::::::::::::R  
+#             d::::::d  iiii                                          R::::::RRRRRR:::::R 
+#             d:::::d                                                 RR:::::R     R:::::R
+#     ddddddddd:::::d iiiiiiivvvvvvv           vvvvvvvaaaaaaaaaaaaa     R::::R     R:::::R
+#   dd::::::::::::::d i:::::i v:::::v         v:::::v a::::::::::::a    R::::R     R:::::R
+#  d::::::::::::::::d  i::::i  v:::::v       v:::::v  aaaaaaaaa:::::a   R::::RRRRRR:::::R 
+# d:::::::ddddd:::::d  i::::i   v:::::v     v:::::v            a::::a   R:::::::::::::RR  
+# d::::::d    d:::::d  i::::i    v:::::v   v:::::v      aaaaaaa:::::a   R::::RRRRRR:::::R 
+# d:::::d     d:::::d  i::::i     v:::::v v:::::v     aa::::::::::::a   R::::R     R:::::R
+# d:::::d     d:::::d  i::::i      v:::::v:::::v     a::::aaaa::::::a   R::::R     R:::::R
+# d:::::d     d:::::d  i::::i       v:::::::::v     a::::a    a:::::a   R::::R     R:::::R
+# d::::::ddddd::::::ddi::::::i       v:::::::v      a::::a    a:::::a RR:::::R     R:::::R
+#  d:::::::::::::::::di::::::i        v:::::v       a:::::aaaa::::::a R::::::R     R:::::R
+#   d:::::::::ddd::::di::::::i         v:::v         a::::::::::aa:::aR::::::R     R:::::R
+#    ddddddddd   dddddiiiiiiii          vvv           aaaaaaaaaa  aaaaRRRRRRRR     RRRRRRR
+
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
+
+# # # bug in plot_train for continuous? or two feature?
+# # # bug in plot where those stray points appear at origin and max
+
+# # # load utilities script
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 source('utils.r')
-
-# # # test out diagonal approach for pairwise diffs w n>2 cats
 
 # # # Initialize model parameters
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
@@ -13,10 +37,10 @@ model <- list(num_blocks    = 20,
 			  beta_val      = 5,
 			  out_rule      = 'sigmoid') # linear / tan not implemented
 
-#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 # # # run demo ? 
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 demo <- TRUE  # run demo
-# demo <- FALSE # run something else
+# demo <- FALSE # do something else
 
 if (demo == TRUE) {
   # # # create training results 
@@ -24,7 +48,7 @@ if (demo == TRUE) {
   
   # # # initialize model and run it on each SHJ category structure
   for (shj in 1:7) { 
-  	print(shj)
+
     # # # get shj stimuli
     cases <- shj_cats(shj)
     model$inputs <- cases$inputs

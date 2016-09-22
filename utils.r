@@ -1,4 +1,23 @@
-# # # setwd('C:/Users/garre/Dropbox/aa projects/DIVA')
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
+
+#                          tttt            iiii  lllllll                  
+#                       ttt:::t           i::::i l:::::l                  
+#                       t:::::t            iiii  l:::::l                  
+#                       t:::::t                  l:::::l                  
+# uuuuuu    uuuuuuttttttt:::::ttttttt    iiiiiii  l::::l     ssssssssss   
+# u::::u    u::::ut:::::::::::::::::t    i:::::i  l::::l   ss::::::::::s  
+# u::::u    u::::ut:::::::::::::::::t     i::::i  l::::l ss:::::::::::::s 
+# u::::u    u::::utttttt:::::::tttttt     i::::i  l::::l s::::::ssss:::::s
+# u::::u    u::::u      t:::::t           i::::i  l::::l  s:::::s  ssssss 
+# u::::u    u::::u      t:::::t           i::::i  l::::l    s::::::s      
+# u::::u    u::::u      t:::::t           i::::i  l::::l       s::::::s   
+# u:::::uuuu:::::u      t:::::t    tttttt i::::i  l::::l ssssss   s:::::s 
+# u:::::::::::::::uu    t::::::tttt:::::ti::::::il::::::ls:::::ssss::::::s
+#  u:::::::::::::::u    tt::::::::::::::ti::::::il::::::ls::::::::::::::s 
+#   uu::::::::uu:::u      tt:::::::::::tti::::::il::::::l s:::::::::::ss  
+#     uuuuuuuu  uuuu        ttttttttttt  iiiiiiiillllllll  sssssssssss    
+
+#  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
 # # # backprop
 # backpropagate error and update weights
@@ -53,7 +72,7 @@ forward_pass <- function(in_wts, out_wts, inputs, out_rule) {
   out_activation <- array(rep(0, (num_stims * num_feats * num_cats)), 
     dim = c(num_stims, num_feats, num_cats))
   
-  # # NEED VECTORIZED HERE
+  # # NEED VECTORIZED HERE?
   # # # get output activation
   for (category in 1:num_cats) {
   	out_activation[,,category] <- hid_activation %*% out_wts[,,category]
@@ -99,7 +118,7 @@ get_wts <- function(num_feats, num_hids, num_cats, wts_range, wts_center) {
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 global_scale <- function(x) { x / 2 + 0.5 }
 
-# # # trainp_lot
+# # # train_plot
 # function to produce line plot of training
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 train_plot <- function(training) {
@@ -152,12 +171,7 @@ response_rule <- function(out_activation, target_activation, beta_val){
   ssqerror <- ssqerror ^ 2
   ssqerror[ssqerror < 1e-7] <- 1e-7
 
-  # # # generate focus weights
-   
-  # # # get pairwise differences for feature activation
-  # # # this needs to be coded to adjust for n>2 cats
-  
-  # # # get list of channelwise comparisons
+  # # # get list of channel comparisons
   pairwise_comps <- combn(1:num_cats, 2)
   
   # # # get differences between each feature
@@ -193,8 +207,8 @@ return(list(ps       = (ssqerror / sum(ssqerror)),
 run_diva <- function(model) {
   
   # # # get new seed
-  seed <- runif(1) * 100000 * runif(1)
-  set.seed(seed)
+  model.seed <- runif(1) * 100000 * runif(1)
+  set.seed(model.seed)
   
   # # # set mean value of weights
   model$wts_center <- 0 
@@ -215,8 +229,8 @@ run_diva <- function(model) {
     
     # # # generate weights
     wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, model$wts_range, model$wts_center)
-
-    # # # generate presentation order
+    
+    # # # generate random presentation order
     prez_order <- as.vector(apply(replicate(model$num_blocks, 
       seq(1, model$num_stims)), 2, sample, model$num_stims))
 
@@ -242,6 +256,7 @@ run_diva <- function(model) {
       adjusted_wts <- backprop(class_wts, wts$in_wts, class_activation, current_target,  
                fp$hid_activation, fp$hid_activation_raw, fp$ins_w_bias, model$learning_rate)
 
+      # # # set new weights
       wts$out_wts[,,current_class] <- adjusted_wts$out_wts
       wts$in_wts <- adjusted_wts$in_wts
   
@@ -252,7 +267,8 @@ run_diva <- function(model) {
 training_means <- 
   rowMeans(matrix(rowMeans(training), nrow = model$num_blocks, ncol = model$num_stims, byrow = TRUE))
 
-return(list(training = training_means))
+return(list(training = training_means,
+            model    = model))
 
 }
 
@@ -292,7 +308,8 @@ return(list(inputs = in_pattern,
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 sigmoid <- function(x) {
   g = 1 / (1 + exp(-x))
-  return(g)
+
+return(g)
 
 }
 
@@ -300,6 +317,7 @@ sigmoid <- function(x) {
 # returns the gradient of the sigmoid function evaluated at x
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 sigmoid_grad <- function(x) {
-  return(g = ((sigmoid(x)) * (1 - sigmoid(x))))
+  
+return(g = ((sigmoid(x)) * (1 - sigmoid(x))))
 
 }
