@@ -12,7 +12,6 @@
 # d::::::d    d:::::d  i::::i    v:::::v   v:::::v      aaaaaaa:::::a   R::::RRRRRR:::::R 
 # d:::::d     d:::::d  i::::i     v:::::v v:::::v     aa::::::::::::a   R::::R     R:::::R
 # d:::::d     d:::::d  i::::i      v:::::v:::::v     a::::aaaa::::::a   R::::R     R:::::R
-# d:::::d     d:::::d  i::::i       v:::::::::v     a::::a    a:::::a   R::::R     R:::::R
 # d::::::ddddd::::::ddi::::::i       v:::::::v      a::::a    a:::::a RR:::::R     R:::::R
 #  d:::::::::::::::::di::::::i        v:::::v       a:::::aaaa::::::a R::::::R     R:::::R
 #   d:::::::::ddd::::di::::::i         v:::v         a::::::::::aa:::aR::::::R     R:::::R
@@ -22,6 +21,7 @@
 
 # # # bug in plot_train for continuous? or two feature?
 # # # bug in plot where those stray points appear at origin and max
+# # # need to test batch
 
 # # # load utilities script
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
