@@ -188,7 +188,7 @@ response_rule <- function(out_activation, target_activation, beta_val){
   diversities[diversities > 1e+7] <- 1e+7
 
   # divide diversities by sum of diversities
-  fweights = diversities / sum(diversities)
+  fweights <- diversities / sum(diversities)
 
   # # # apply focus weights; then get sum for each category
   ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
@@ -248,20 +248,24 @@ run_diva <- function(model) {
 
       # # # store classification accuracy
       training[trial_num, model_num] = response$ps[current_class]
+      
+# # # change here to test branching
 
       # # # back propagate error to adjust weights
       class_wts <- wts$out_wts[,,current_class]
       class_activation <- fp$out_activation[,,current_class]
-
+      
       adjusted_wts <- backprop(class_wts, wts$in_wts, class_activation, current_target,  
                fp$hid_activation, fp$hid_activation_raw, fp$ins_w_bias, model$learning_rate)
-
+      
       # # # set new weights
       wts$out_wts[,,current_class] <- adjusted_wts$out_wts
       wts$in_wts <- adjusted_wts$in_wts
   
     }
-
+  
+  # # # test phases go here
+  
   }
 
 training_means <- 
