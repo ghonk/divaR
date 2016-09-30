@@ -275,7 +275,7 @@ return(list(training = training_means,
 # shj_cats
 # loads shj category structures
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
-shj_cats <- function(type){
+demo_cats <- function(type){
   
   in_pattern <- 
     matrix(c(-1, -1, -1,

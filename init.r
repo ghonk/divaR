@@ -19,10 +19,6 @@
 
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
-# # # bug in plot_train for continuous? or two feature?
-# # # bug in plot where those stray points appear at origin and max
-# # # need to test batch
-
 # # # load utilities script
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 source('utils.r')
@@ -35,38 +31,36 @@ model <- list(num_blocks    = 20,
 			  num_hids      = 3,
 			  learning_rate = 0.15,
 			  beta_val      = 5,
-			  out_rule      = 'sigmoid') # linear / tan not implemented
+			  out_rule      = 'sigmoid') # anything else runs linear
 
-# # # run demo ? 
+# # # The demo below trains the DIVA model on the Shepard, Hovland, 
+# # # and Jenkins' elemental types (1961) plus one 4-class problem.
+# # # This demo can be used as a template for your own problem.
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
-demo <- TRUE  # run demo
-# demo <- FALSE # do something else
 
-if (demo == TRUE) {
-  # # # create training results 
-  training = matrix(rep(0, model$num_blocks * 7), ncol = 7)
-  
-  # # # initialize model and run it on each SHJ category structure
-  for (shj in 1:7) { 
+# # # create training results 
+training = matrix(rep(0, model$num_blocks * 7), ncol = 7)
 
-    # # # get shj stimuli
-    cases <- shj_cats(shj)
-    model$inputs <- cases$inputs
-    model$labels <- cases$labels
+# # # initialize model and run it on each SHJ category structure
+for (category_type in 1:7) { 
 
-    # # # train model
-    result <- run_diva(model)
+  # # # get shj stimuli
+  cases <- demo_cats(category_type)
+  model$inputs <- cases$inputs
+  model$labels <- cases$labels
 
-  # # # add result to training matrix
-  training[,shj] <- result$training
+  # # # train model
+  result <- run_diva(model)
 
-  }
+# # # add result to training matrix
+training[,category_type] <- result$training
 
-  # # # display results
-  print(training)
-  train_plot(training)
-  save.image('diva_run.rdata')
 }
+
+# # # display results
+print(training)
+train_plot(training)
+save.image('diva_run.rdata')
 
 # warnings()
 
