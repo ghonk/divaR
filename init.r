@@ -19,6 +19,12 @@
 
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 
+# # # bug in plot_train for continuous? or two feature?
+# # # bug in plot where those stray points appear at origin and max
+# # # need to test batch
+# # # rectified linear hiddens
+# # # grid search utilities
+
 # # # load utilities script
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 source('utils.r')
