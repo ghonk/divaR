@@ -32,12 +32,12 @@ source('utils.r')
 # # # Initialize model parameters
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 model <- list(num_blocks    = 20,
-			  num_inits     = 5,
-			  wts_range     = 1,
-			  num_hids      = 3,
-			  learning_rate = 0.15,
-			  beta_val      = 5,
-			  out_rule      = 'sigmoid') # anything else runs linear
+			        num_inits     = 5,
+			        wts_range     = 1,
+			        num_hids      = 3,
+			        learning_rate = 0.15,
+			        beta_val      = 5,
+			        out_rule      = 'sigmoid') # anything else runs linear
 
 # # # The demo below trains the DIVA model on the Shepard, Hovland, 
 # # # and Jenkins' elemental types (1961) plus one 4-class problem.

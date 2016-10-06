@@ -226,7 +226,7 @@ run_diva <- function(model) {
   
   # # # initialize and run DIVA models
   for (model_num in 1:model$num_inits) {
-    
+
     # # # generate weights
     wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, model$wts_range, model$wts_center)
     
