@@ -224,6 +224,10 @@ run_diva <- function(model) {
     matrix(rep(NA, model$num_updates * model$num_inits), 
       nrow = model$num_updates, ncol = model$num_inits)
   
+  hid_acti_mat <- 
+    array(rep(NA, (model$num_updates * model$num_inits * model$num_hids)), 
+      dim = c(model$num_inits, model$num_hids, model$num_updates))
+
   # # # initialize and run DIVA models
   for (model_num in 1:model$num_inits) {
 
@@ -242,6 +246,9 @@ run_diva <- function(model) {
 
       # # # complete forward pass
       fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
+
+      # # # save hid weights for viz
+      hid_acti_mat[model_num, ,trial_num] <- fp$hid_activation[,-1] 
 
       # # # calculate classification probability
       response <- response_rule(fp$out_activation, current_target, model$beta_val)
@@ -266,6 +273,11 @@ run_diva <- function(model) {
 
 training_means <- 
   rowMeans(matrix(rowMeans(training), nrow = model$num_blocks, ncol = model$num_stims, byrow = TRUE))
+
+hid_acti_means <- apply(hid_acti_mat, 3, colMeans)
+
+print(hid_acti_means)
+model$hid_acti_mat <- hid_acti_means
 
 return(list(training = training_means,
             model    = model))
