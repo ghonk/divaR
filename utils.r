@@ -176,7 +176,7 @@ response_rule <- function(out_activation, target_activation, beta_val){
   
   # # # get differences between each feature
   dist_mat <- as.matrix(dist(out_activation, upper = TRUE))
-
+  
   # # # get key differences between each feature for all channels
   pairwise_diffs <- t(apply(pairwise_comps, 2, function(x) {
     diag(dist_mat[((x[1] * num_feats) - (num_feats - 1)):(x[1] * num_feats),

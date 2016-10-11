@@ -24,6 +24,8 @@
 # # # need to test batch
 # # # rectified linear hiddens
 # # # grid search utilities
+# # # how to deal with continuous scaling
+# # # 
 
 # # # load utilities script
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
