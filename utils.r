@@ -248,8 +248,6 @@ run_diva <- function(model) {
 
       # # # store classification accuracy
       training[trial_num, model_num] = response$ps[current_class]
-      
-# # # change here to test branching
 
       # # # back propagate error to adjust weights
       class_wts <- wts$out_wts[,,current_class]
@@ -325,3 +323,4 @@ sigmoid_grad <- function(x) {
 return(g = ((sigmoid(x)) * (1 - sigmoid(x))))
 
 }
+
