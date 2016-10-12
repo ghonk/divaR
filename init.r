@@ -49,6 +49,7 @@ model <- list(num_blocks    = 20,
 
 # # # create training results 
 training = matrix(rep(0, model$num_blocks * 7), ncol = 7)
+comp_results <- list()
 
 # # # initialize model and run it on each SHJ category structure
 for (category_type in 1:7) { 
@@ -62,6 +63,7 @@ for (category_type in 1:7) {
   result <- run_diva(model)
 
   # # # add result to training matrix
+  comp_results[[category_type]] <- result
   training[,category_type] <- result$training
 
 }

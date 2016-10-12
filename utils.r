@@ -223,10 +223,8 @@ run_diva <- function(model) {
   training <- 
     matrix(rep(NA, model$num_updates * model$num_inits), 
       nrow = model$num_updates, ncol = model$num_inits)
-  
-  hid_acti_mat <- 
-    array(rep(NA, (model$num_updates * model$num_inits * model$num_hids)), 
-      dim = c(model$num_inits, model$num_hids, model$num_updates))
+
+  hid_acti_list <- list()
 
   # # # initialize and run DIVA models
   for (model_num in 1:model$num_inits) {
@@ -238,6 +236,11 @@ run_diva <- function(model) {
     prez_order <- as.vector(apply(replicate(model$num_blocks, 
       seq(1, model$num_stims)), 2, sample, model$num_stims))
 
+    # # # create comprehensive hidden activation matrix
+    hid_acti_list[[model_num]] <-  with(model, 
+      array(rep(NA, (num_blocks * num_stims * num_hids)), 
+        dim = c(num_hids, num_stims, num_blocks))) 
+
     # # # iterate over each trial in the presentation order 
     for (trial_num in 1:model$num_updates) {
       current_input  <- model$inputs[prez_order[[trial_num]], ]
@@ -247,8 +250,15 @@ run_diva <- function(model) {
       # # # complete forward pass
       fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
 
-      # # # save hid weights for viz
-      hid_acti_mat[model_num, ,trial_num] <- fp$hid_activation[,-1] 
+      # # # store hidden activation matrix
+      curr_block <- 
+        ifelse(((1:model$num_updates)[trial_num] %% model$num_stims) == 0,
+          sum(((1:model$num_updates)[1:trial_num] %% model$num_stims) == 0) - 1,
+            sum(((1:model$num_updates)[1:trial_num] %% model$num_stims) == 0))
+      curr_block <- curr_block + 1
+
+      hid_acti_list[[model_num]][ , prez_order[[trial_num]], curr_block] <- 
+        fp$hid_activation[,-1] 
 
       # # # calculate classification probability
       response <- response_rule(fp$out_activation, current_target, model$beta_val)
@@ -275,13 +285,10 @@ run_diva <- function(model) {
   
   }
 
+model$hid_acti_list <- hid_acti_list
+
 training_means <- 
   rowMeans(matrix(rowMeans(training), nrow = model$num_blocks, ncol = model$num_stims, byrow = TRUE))
-
-hid_acti_means <- apply(hid_acti_mat, 3, colMeans)
-
-print(hid_acti_means)
-model$hid_acti_mat <- hid_acti_means
 
 return(list(training = training_means,
             model    = model))
