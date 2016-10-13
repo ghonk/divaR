@@ -26,8 +26,6 @@
 # # # grid search utilities
 # # # how to deal with continuous scaling
 
-# # # CURRENT BRANCH PROBLEM - EGS NOT CONSISTENT ACROSS VIZ
-
 # # # load utilities script
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 source('utils.r')
