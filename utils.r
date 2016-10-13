@@ -188,7 +188,7 @@ response_rule <- function(out_activation, target_activation, beta_val){
   diversities[diversities > 1e+7] <- 1e+7
 
   # divide diversities by sum of diversities
-  fweights = diversities / sum(diversities)
+  fweights <- diversities / sum(diversities)
 
   # # # apply focus weights; then get sum for each category
   ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
@@ -223,7 +223,9 @@ run_diva <- function(model) {
   training <- 
     matrix(rep(NA, model$num_updates * model$num_inits), 
       nrow = model$num_updates, ncol = model$num_inits)
-  
+
+  hid_acti_list <- list()
+
   # # # initialize and run DIVA models
   for (model_num in 1:model$num_inits) {
 
@@ -234,6 +236,11 @@ run_diva <- function(model) {
     prez_order <- as.vector(apply(replicate(model$num_blocks, 
       seq(1, model$num_stims)), 2, sample, model$num_stims))
 
+    # # # create comprehensive hidden activation matrix
+    hid_acti_list[[model_num]] <-  with(model, 
+      array(rep(NA, (num_blocks * num_stims * num_hids)), 
+        dim = c(num_hids, num_stims, num_blocks))) 
+
     # # # iterate over each trial in the presentation order 
     for (trial_num in 1:model$num_updates) {
       current_input  <- model$inputs[prez_order[[trial_num]], ]
@@ -243,26 +250,42 @@ run_diva <- function(model) {
       # # # complete forward pass
       fp <- forward_pass(wts$in_wts, wts$out_wts, current_input, model$out_rule)
 
+      # # # store hidden activation matrix
+      curr_block <- 
+        ifelse(((1:model$num_updates)[trial_num] %% model$num_stims) == 0,
+          sum(((1:model$num_updates)[1:trial_num] %% model$num_stims) == 0) - 1,
+            sum(((1:model$num_updates)[1:trial_num] %% model$num_stims) == 0))
+      curr_block <- curr_block + 1
+
+      hid_acti_list[[model_num]][ , prez_order[[trial_num]], curr_block] <- 
+        fp$hid_activation[,-1] 
+
       # # # calculate classification probability
       response <- response_rule(fp$out_activation, current_target, model$beta_val)
 
       # # # store classification accuracy
       training[trial_num, model_num] = response$ps[current_class]
+      
+# # # change here to test branching
 
       # # # back propagate error to adjust weights
       class_wts <- wts$out_wts[,,current_class]
       class_activation <- fp$out_activation[,,current_class]
-
+      
       adjusted_wts <- backprop(class_wts, wts$in_wts, class_activation, current_target,  
                fp$hid_activation, fp$hid_activation_raw, fp$ins_w_bias, model$learning_rate)
-
+      
       # # # set new weights
       wts$out_wts[,,current_class] <- adjusted_wts$out_wts
       wts$in_wts <- adjusted_wts$in_wts
   
     }
-
+  
+  # # # test phases go here
+  
   }
+
+model$hid_acti_list <- hid_acti_list
 
 training_means <- 
   rowMeans(matrix(rowMeans(training), nrow = model$num_blocks, ncol = model$num_stims, byrow = TRUE))
@@ -321,3 +344,4 @@ sigmoid_grad <- function(x) {
 return(g = ((sigmoid(x)) * (1 - sigmoid(x))))
 
 }
+
