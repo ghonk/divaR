@@ -32,7 +32,7 @@ source('utils.r')
 
 # # # Initialize model parameters
 #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
-model <- list(num_blocks    = 20,
+model <- list(num_blocks    = 100,
 			        num_inits     = 5,
 			        wts_range     = 1,
 			        num_hids      = 3,
