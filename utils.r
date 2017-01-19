@@ -174,17 +174,17 @@ response_rule <- function(out_activation, target_activation, beta_val){
   # # # get list of channel comparisons
   pairwise_comps <- combn(1:num_cats, 2)
   
-  # # # get differences between each feature
-  dist_mat <- as.matrix(dist(out_activation, upper = TRUE))
+  # # # get differences for each feature between categories
+  diff_matrix <- 
+    abs(apply(pairwise_comps, 2, function(x) {
+      out_activation[,,x[1]] - out_activation[,,x[2]]}))
 
-  # # # get key differences between each feature for all channels
-  pairwise_diffs <- t(apply(pairwise_comps, 2, function(x) {
-    diag(dist_mat[((x[1] * num_feats) - (num_feats - 1)):(x[1] * num_feats),
-      ((x[2] * num_feats) - (num_feats - 1)):(x[2] * num_feats)])
-  }))
+  # # # reconstruct activation array and get feature diversity means
+  diff_array <- array(diff_matrix, dim = c(num_stims, num_feats, num_cats))
+  feature_diffs <- apply(diff_array, 2, mean)
 
   # # # calculate diversities
-  diversities <- exp(beta_val * colMeans(pairwise_diffs))
+  diversities <- exp(beta_val * feature_diffs)
   diversities[diversities > 1e+7] <- 1e+7
 
   # divide diversities by sum of diversities
@@ -226,9 +226,10 @@ run_diva <- function(model) {
   
   # # # initialize and run DIVA models
   for (model_num in 1:model$num_inits) {
-    
+
     # # # generate weights
-    wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, model$wts_range, model$wts_center)
+    wts <- get_wts(model$num_feats, model$num_hids, model$num_cats, 
+      model$wts_range, model$wts_center)
     
     # # # generate random presentation order
     prez_order <- as.vector(apply(replicate(model$num_blocks, 

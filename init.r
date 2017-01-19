@@ -62,6 +62,6 @@ print(training)
 train_plot(training)
 save.image('diva_run.rdata')
 
-# warnings()
+warnings()
 
 
