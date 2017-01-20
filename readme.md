@@ -1,20 +1,20 @@
                                                                                                                                          
-# DDDDDDDDDDDDD      IIIIIIIIIIVVVVVVVV           VVVVVVVV   AAA               
-# D::::::::::::DDD   I::::::::IV::::::V           V::::::V  A:::A              
-# D:::::::::::::::DD I::::::::IV::::::V           V::::::V A:::::A             
-# DDD:::::DDDDD:::::DII::::::IIV::::::V           V::::::VA:::::::A            
-#   D:::::D    D:::::D I::::I   V:::::V           V:::::VA:::::::::A           
-#   D:::::D     D:::::DI::::I    V:::::V         V:::::VA:::::A:::::A          
-#   D:::::D     D:::::DI::::I     V:::::V       V:::::VA:::::A A:::::A         
-#   D:::::D     D:::::DI::::I      V:::::V     V:::::VA:::::A   A:::::A        
-#   D:::::D     D:::::DI::::I       V:::::V   V:::::VA:::::A     A:::::A       
-#   D:::::D     D:::::DI::::I        V:::::V V:::::VA:::::AAAAAAAAA:::::A      
-#   D:::::D     D:::::DI::::I         V:::::V:::::VA:::::::::::::::::::::A     
-#   D:::::D    D:::::D I::::I          V:::::::::VA:::::AAAAAAAAAAAAA:::::A    
-# DDD:::::DDDDD:::::DII::::::II         V:::::::VA:::::A             A:::::A   
-# D:::::::::::::::DD I::::::::I          V:::::VA:::::A               A:::::A  
-# D::::::::::::DDD   I::::::::I           V:::VA:::::A                 A:::::A 
-# DDDDDDDDDDDDD      IIIIIIIIII            VVVAAAAAAA                   AAAAAAA
+DDDDDDDDDDDDD      IIIIIIIIIIVVVVVVVV           VVVVVVVV   AAA               
+D::::::::::::DDD   I::::::::IV::::::V           V::::::V  A:::A              
+D:::::::::::::::DD I::::::::IV::::::V           V::::::V A:::::A             
+DDD:::::DDDDD:::::DII::::::IIV::::::V           V::::::VA:::::::A            
+  D:::::D    D:::::D I::::I   V:::::V           V:::::VA:::::::::A           
+  D:::::D     D:::::DI::::I    V:::::V         V:::::VA:::::A:::::A          
+  D:::::D     D:::::DI::::I     V:::::V       V:::::VA:::::A A:::::A         
+  D:::::D     D:::::DI::::I      V:::::V     V:::::VA:::::A   A:::::A        
+  D:::::D     D:::::DI::::I       V:::::V   V:::::VA:::::A     A:::::A       
+  D:::::D     D:::::DI::::I        V:::::V V:::::VA:::::AAAAAAAAA:::::A      
+  D:::::D     D:::::DI::::I         V:::::V:::::VA:::::::::::::::::::::A     
+  D:::::D    D:::::D I::::I          V:::::::::VA:::::AAAAAAAAAAAAA:::::A    
+DDD:::::DDDDD:::::DII::::::II         V:::::::VA:::::A             A:::::A   
+D:::::::::::::::DD I::::::::I          V:::::VA:::::A               A:::::A  
+D::::::::::::DDD   I::::::::I           V:::VA:::::A                 A:::::A 
+DDDDDDDDDDDDD      IIIIIIIIII            VVVAAAAAAA                   AAAAAAA
                                                                              
 ## DIVergent Autoencoder, Artifical Neural Network Classifier 
 ### Implemented in R (see also N. Conaway's [Matlab implementation](https://github.com/nolanbconaway/DIVA))
