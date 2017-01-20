@@ -27,7 +27,7 @@ model <- list(
 
 The inputs are saved as a matrix in `model$inputs`
 
-The catgeory labels are saved as a vector in `model$labels`
+The class labels are saved as a vector in `model$labels`
 
 ```
 cases <- demo_cats(category_type)
