@@ -13,7 +13,7 @@ source('utils.r')
 
 The model takes a list object named `model`
 
-It contains the networks hyperparameters (defaults below)
+It contains the network's hyperparameters (defaults below) and the inputs and class labels.
 ```
 model <- list(
   num_blocks    = 20,
