@@ -40,7 +40,7 @@ Run the model with
 result <- run_diva(model)
 ```
 
-Note (adapted from [original DIVA repo](https://github.com/nolanbconaway/DIVA))
+Note (adapted from [original DIVA repo](https://github.com/nolanbconaway/DIVA)):
 
 For almost all situations, inputs should be scaled to [-1 +1]. However, the target activations should be scaled to [0 1], in order to permit logistic output units. By default, the program automatically computes targets as scaled versions of the inputs (`targets <- inputs / 2 + 0.5`). This is done in utils.r, `run_diva` function.
 
