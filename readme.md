@@ -39,4 +39,12 @@ Run the model with
 result <- run_diva(model)
 ```
 
+Note (from [original DIVA repo](https://github.com/nolanbconaway/DIVA))
+
+For almost all situations, inputs should be scaled to [-1 +1]. However, the target activations should be scaled to [0 1], in order to permit logistic output units. By default, the program automatically computes targets as scaled versions of the inputs (targets = inputs / 2 + 0.5). This is done in DIVA.m
+
+By default, DIVA uses linear output units for continuous datasets, and logistic outputs for binary datasets. This option is set using outputrule: 'sigmoid' for logistic units, other values will result in linear. When linear outputs are used, SSE will be the error measure. Cross-entropy error is used for logistic outputs. Hidden units are always logistic.
+
+
+
 Shepard, R. N., Hovland, C. I., & Jenkins, H. M. (1961). Learning and memorization of classifications. Psychological monographs: General and applied, 75(13), 1.
