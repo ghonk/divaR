@@ -2,7 +2,7 @@
 ## DIVergent Autoencoder, Artifical Neural Network Classifier 
 ### Implemented in R
 
-This repository includes a collection of functions that implement the DIVA artificial neural network classification architecture in R. Executing `source('init.r')` from within the repository's local diectory runs a demonstration of the model on 7 category structures (the classic Shepard, Hovland and Jenkins [(1961)](http://psycnet.apa.org/journals/mon/75/13/1/) elemental category structures and a 4-class problem) and returns the resulting training accuracy, an accuracy plot and an `.rdata` file with the result.    
+This repository includes a collection of functions that implement the DIVA artificial neural network classification architecture in R. Executing `source('init.r')` from within the repository's local diectory runs a demonstration of the model on 7 category structures (the classic Shepard, Hovland and Jenkins [(1961)](http://psycnet.apa.org/journals/mon/75/13/1/) elemental category structures and a 4-class problem) and returns the resulting training accuracy, an accuracy plot and an `.rdata` file with the result. A *brief* tutorial follows.    
 
 First, load the model functions
 
