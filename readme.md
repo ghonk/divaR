@@ -4,6 +4,7 @@
 
 This repository includes a collection of functions that implement the DIVA artificial neural network classification architecture in R. Executing `source('init.r')` from within the repository's local diectory runs a demonstration of the model on 7 category structures (the classic Shepard, Hovland and Jenkins [(1961)](http://psycnet.apa.org/journals/mon/75/13/1/) elemental category structures and a 4-class problem) and returns the resulting training accuracy, an accuracy plot and an `.rdata` file with the result. A *brief* tutorial follows.    
 
+### Tutorial
 First, load the model functions
 
 ```
@@ -46,5 +47,5 @@ For almost all situations, inputs should be scaled to [-1 +1]. However, the targ
 By default, DIVA uses linear output units for continuous datasets, and logistic outputs for binary datasets. This option is set using outputrule: 'sigmoid' for logistic units, other values will result in linear. When linear outputs are used, SSE will be the error measure. Cross-entropy error is used for logistic outputs. Hidden units are always logistic.
 
 
-
+### References
 Shepard, R. N., Hovland, C. I., & Jenkins, H. M. (1961). Learning and memorization of classifications. Psychological monographs: General and applied, 75(13), 1.
