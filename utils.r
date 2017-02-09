@@ -192,15 +192,16 @@ response_rule <- function(out_activation, target_activation, beta_val){
     # # # divide diversities by sum of diversities
     fweights = diversities / sum(diversities)
 
-  # # # otherwise, set focus weights to 1
+    # # # apply focus weights; then get sum for each category
+    ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
+
+  # # # otherwise, set focus weights to NULL
   } else {
-    fweights <- rep(1, num_feats)
+    fweights <- NULL
   }
 
-  # # # apply focus weights; then get sum for each category
-  ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
+  # # # calculate inverse sse
   ssqerror <- 1 / ssqerror
-
 
 return(list(ps       = (ssqerror / sum(ssqerror)), 
             fweights = fweights, 
