@@ -171,24 +171,31 @@ response_rule <- function(out_activation, target_activation, beta_val){
   ssqerror <- ssqerror ^ 2
   ssqerror[ssqerror < 1e-7] <- 1e-7
 
-  # # # get list of channel comparisons
-  pairwise_comps <- combn(1:num_cats, 2)
-  
-  # # # get differences for each feature between categories
-  diff_matrix <- 
-    abs(apply(pairwise_comps, 2, function(x) {
-      out_activation[,,x[1]] - out_activation[,,x[2]]}))
+  # # # if focusing is on:
+  if (beta_val > 0) {
+    # # # get list of channel comparisons
+    pairwise_comps <- combn(1:num_cats, 2)
+    
+    # # # get differences for each feature between categories
+    diff_matrix <- 
+      abs(apply(pairwise_comps, 2, function(x) {
+        out_activation[,,x[1]] - out_activation[,,x[2]]}))
 
-  # # # reconstruct activation array and get feature diversity means
-  diff_array <- array(diff_matrix, dim = c(num_stims, num_feats, num_cats))
-  feature_diffs <- apply(diff_array, 2, mean)
+    # # # reconstruct activation array and get feature diversity means
+    diff_array <- array(diff_matrix, dim = c(num_stims, num_feats, num_cats))
+    feature_diffs <- apply(diff_array, 2, mean)
 
-  # # # calculate diversities
-  diversities <- exp(beta_val * feature_diffs)
-  diversities[diversities > 1e+7] <- 1e+7
+    # # # calculate diversities
+    diversities <- exp(beta_val * feature_diffs)
+    diversities[diversities > 1e+7] <- 1e+7
 
-  # divide diversities by sum of diversities
-  fweights = diversities / sum(diversities)
+    # # # divide diversities by sum of diversities
+    fweights = diversities / sum(diversities)
+
+  # # # otherwise, set focus weights to 1
+  } else {
+    fweights <- rep(1, num_feats)
+  }
 
   # # # apply focus weights; then get sum for each category
   ssqerror <- t(apply(ssqerror, 3, function(x) sum(x * fweights))) 
